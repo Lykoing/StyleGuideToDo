@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-main-bg h-max;
+}
+
+h1 {
+  @apply text-2xl;
+}
+
+button {
+  @apply px-3 py-2 
+    bg-main-btn border-main-brd border-2 rounded-xl;
+}
