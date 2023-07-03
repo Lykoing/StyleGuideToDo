@@ -19,6 +19,7 @@ export default {
       btn: {
         bgActive: '#ecee98',
         bg: '#f0e8c5',
+        imp: '#ed9898',
       },
       tasks: {
         item: {

@@ -10,7 +10,7 @@ import ToDoBlock from './components/ToDoBlock.vue'
 
 <style scoped>
 .content {
-  @apply h-screen
+  @apply h-screen py-52
     flex justify-center items-center;
 }
 </style>

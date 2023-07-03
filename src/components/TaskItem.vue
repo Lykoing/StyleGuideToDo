@@ -70,8 +70,7 @@ const props = defineProps({
     flex flex-row justify-between
     bg-tasks-item-bg
     border-2 border-tasks-item-brd rounded-xl
-    transition-all ease-in-out duration-75 delay-75
-    hover:border-4;
+    transition-all ease-in-out duration-300 delay-75;
 }
 
 .taskItem__actions {

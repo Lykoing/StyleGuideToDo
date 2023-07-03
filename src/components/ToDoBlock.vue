@@ -30,7 +30,7 @@ let updateSearchValue = (value) => {
 
 <style scoped>
 .toDoBlock {
-  @apply p-2 w-1/4 space-y-2
+  @apply p-2 w-1/4 space-y-2 self-start
     border-4 border-tasks-brd rounded-3xl;
 }
 

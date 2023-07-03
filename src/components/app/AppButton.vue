@@ -19,7 +19,8 @@ defineProps({
 button {
   @apply px-4 py-2 
   bg-btn-bg 
-  rounded-xl;
+  rounded-xl
+  transition-all ease-in-out duration-300 delay-75;
 }
 button:hover {
   @apply bg-btn-bgActive;

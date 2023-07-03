@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 export const useTasksStore = defineStore('tasks', () => {
   const ordNumber = ref(0)
-
+  const isfilteredByImp = ref(false)
   const tasksList = ref([
     {
       text: 'Здесь будут ваши задачи',
@@ -15,6 +15,9 @@ export const useTasksStore = defineStore('tasks', () => {
     },
   ])
 
+  function toggleImpFiltering() {
+    isfilteredByImp.value = !isfilteredByImp.value
+  }
   function addTask(text) {
     ordNumber.value += 1
     tasksList.value.push({
@@ -64,5 +67,7 @@ export const useTasksStore = defineStore('tasks', () => {
     checkTask,
     editTask,
     makeTaskImp,
+    isfilteredByImp,
+    toggleImpFiltering,
   }
 })
