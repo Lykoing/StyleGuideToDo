@@ -1,13 +1,17 @@
 <script setup>
 import { ref, computed } from 'vue'
 import TaskItem from './TaskItem.vue'
-import ModTasksItemEdit from './ModTasksItemEdit.vue'
+import ModTasksItemEdit from './ModTasksItem.vue'
 import { useTasksStore } from '../stores/tasks.store'
 
 const props = defineProps({
   searchValue: {
     type: String,
     default: '',
+  },
+  toggleOnlyImp: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -17,9 +21,15 @@ let isModActive = ref(false)
 let editingOrd = ref(0)
 
 let taskListFiltered = computed(() => {
-  return taskStore.tasksList.filter(function (item) {
-    return item.text.includes(props.searchValue)
-  })
+  if (props.toggleOnlyImp) {
+    return taskStore.tasksList.filter(function (item) {
+      return item.text.includes(props.searchValue) && item.important
+    })
+  } else {
+    return taskStore.tasksList.filter(function (item) {
+      return item.text.includes(props.searchValue)
+    })
+  }
 })
 
 let editTask = (ord) => {
@@ -43,7 +53,7 @@ let finishEditing = (inputValue) => {
       :ischecked="item.checked"
       :ord="item.ord"
       :key="item.ord"
-      :isimportant="item.importance"
+      :isimportant="item.important"
       @editTask="editTask"
       @deleteTask="(ord) => taskStore.deleteTask(ord)"
       @checkTask="(ord) => taskStore.checkTask(ord)"
@@ -51,7 +61,7 @@ let finishEditing = (inputValue) => {
       class="toDoBlock__taskItem"
     />
     <ModTasksItemEdit
-      v-if="isModActive"
+      :isModActive="isModActive"
       @finishEditing="finishEditing"
       class="itemsList__mod"
     />

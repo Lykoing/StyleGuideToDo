@@ -11,7 +11,7 @@ export const useTasksStore = defineStore('tasks', () => {
       ord: ordNumber.value,
       checked: false,
       visibility: true,
-      importance: false,
+      important: false,
     },
   ])
 
@@ -23,7 +23,7 @@ export const useTasksStore = defineStore('tasks', () => {
       ord: ordNumber.value,
       checked: false,
       visibility: true,
-      importance: false,
+      important: false,
     })
   }
 
@@ -52,7 +52,7 @@ export const useTasksStore = defineStore('tasks', () => {
   function makeTaskImp(ord) {
     tasksList.value.forEach((item) => {
       if (item.ord == ord) {
-        item.importance = !item.importance
+        item.important = !item.important
       }
     })
   }

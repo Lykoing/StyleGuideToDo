@@ -1,5 +1,10 @@
 <script setup>
 import AppButton from './app/AppButton.vue'
+import AppEditSVG from './app/AppEditSVG.vue'
+import AppImpSVG from './app/AppImpSVG.vue'
+import AppCheckSVG from './app/AppCheckSVG.vue'
+import AppDeleteSVG from './app/AppDeleteSVG.vue'
+
 const emit = defineEmits(['editTask', 'deleteTask', 'checkTask'])
 const props = defineProps({
   task: {
@@ -22,7 +27,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div :class="{ importance: props.isimportant }" class="tasksItem">
+  <div :class="{ important: props.isimportant }" class="tasksItem">
     <div :class="{ checked: props.ischecked }" class="taskItem__text">
       {{ props.task }}
     </div>
@@ -31,14 +36,14 @@ const props = defineProps({
         <AppButton
           class="taskItem__actions__imp"
           @click="emit('makeTaskImp', ord)"
-          >!</AppButton
-        >
+          ><AppImpSVG
+        /></AppButton>
 
         <AppButton
           class="taskItem__actions__check"
           @click="emit('checkTask', ord)"
         >
-          ✔
+          <AppCheckSVG />
         </AppButton>
       </div>
       <div class="flex flex-col space-y-1">
@@ -46,13 +51,13 @@ const props = defineProps({
           class="taskItem__actions__edit"
           @click="emit('editTask', ord)"
         >
-          ред.
+          <AppEditSVG />
         </AppButton>
         <AppButton
           class="taskItem__actions__delete"
           @click="emit('deleteTask', ord)"
         >
-          удалить
+          <AppDeleteSVG />
         </AppButton>
       </div>
     </div>
@@ -91,7 +96,7 @@ const props = defineProps({
   @apply hidden;
 }
 
-.importance {
+.important {
   @apply bg-tasks-item-bg-imp;
 }
 </style>

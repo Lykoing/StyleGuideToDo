@@ -5,18 +5,30 @@ import AppInput from './app/AppInput.vue'
 
 const emit = defineEmits(['finishEditing'])
 
+defineProps({
+  isModActive: {
+    type: Boolean,
+    default: false,
+  },
+})
 const inputValue = ref()
+
+let finishEditing = () => {
+  emit('finishEditing', inputValue.value)
+  inputValue.value = ''
+}
 </script>
 
 <template>
-  <div class="editWindow__bg">
+  <div v-if="isModActive" class="editWindow__bg">
     <div class="editWindow__content">
       <div><h1>Введите новый текст задачи:</h1></div>
-      <AppInput v-model="inputValue" class="editWindow__content__input" />
-      <AppButton
-        @click="emit('finishEditing', inputValue)"
-        class="editWindow__content__btn"
-      >
+      <AppInput
+        id="modInput"
+        v-model="inputValue"
+        class="editWindow__content__input"
+      />
+      <AppButton @click="finishEditing" class="editWindow__content__btn">
         <p>Готово</p>
       </AppButton>
     </div>

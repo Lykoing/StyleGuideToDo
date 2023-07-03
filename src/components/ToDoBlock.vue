@@ -2,9 +2,10 @@
 import { ref } from 'vue'
 import TasksList from './TasksList.vue'
 import ToDoBlockActions from './ToDoBlockActions.vue'
-import TaskSearch from './TaskSearch.vue'
+import TaskFilter from './TaskFilter.vue'
 
 let searchValue = ref('')
+let toggleOnlyImp = ref(false)
 
 let updateSearchValue = (value) => {
   searchValue.value = value
@@ -14,8 +15,15 @@ let updateSearchValue = (value) => {
 <template>
   <div class="toDoBlock">
     <div class="toDoBlock__title"><h1>Список задач:</h1></div>
-    <TaskSearch @find="updateSearchValue" />
-    <TasksList :searchValue="searchValue" class="toDoBlock__tasksList" />
+    <TaskFilter
+      @find="updateSearchValue"
+      @toggleOnlyImp="toggleOnlyImp = !toggleOnlyImp"
+    />
+    <TasksList
+      :toggleOnlyImp="toggleOnlyImp"
+      :searchValue="searchValue"
+      class="toDoBlock__tasksList"
+    />
     <ToDoBlockActions class="toDoBlock__actions" />
   </div>
 </template>

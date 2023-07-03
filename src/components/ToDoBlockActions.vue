@@ -1,31 +1,25 @@
 <script setup>
 import AppButton from './app/AppButton.vue'
-import AppInput from './app/AppInput.vue'
 import { useTasksStore } from '../stores/tasks.store'
+import ModTasksItem from './ModTasksItem.vue'
 import { ref } from 'vue'
 
 const tasksStore = useTasksStore()
 
-const inputValue = ref()
+const toggleMod = ref(false)
 
-let addTask = () => {
-  if (inputValue.value) {
-    tasksStore.addTask(inputValue.value)
+let addTask = (inputValue) => {
+  if (inputValue) {
+    tasksStore.addTask(inputValue)
   }
-  document.querySelector('#newTask').value = ''
-  inputValue.value = ''
+  toggleMod.value = !toggleMod.value
 }
 </script>
 
 <template>
   <div class="actions">
-    <AppInput
-      id="newTask"
-      v-model="inputValue"
-      placeholder="Введите новую задачу"
-      @keyup.enter="addTask"
-    />
-    <AppButton @click="addTask">Добавить</AppButton>
+    <ModTasksItem :isModActive="toggleMod" @finishEditing="addTask" />
+    <AppButton @click="toggleMod = !toggleMod">Добавить задачу</AppButton>
   </div>
 </template>
 
