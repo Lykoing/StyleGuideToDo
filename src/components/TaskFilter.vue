@@ -6,13 +6,12 @@ import AppImpSVG from './app/AppImpSVG.vue'
 import { useTasksStore } from '../stores/tasks.store'
 const taskStore = useTasksStore()
 
-const emit = defineEmits(['find', 'toggleOnlyImp'])
-
 const inputValue = ref()
+const toggleImpFiltering = taskStore.toggleImpFiltering
 
-let toggleImpFiltering = () => {
-  emit('toggleOnlyImp')
-  taskStore.toggleImpFiltering()
+let updateSearchValue = () => {
+  taskStore.updateSearchValue(inputValue.value)
+  taskStore.searchFiltering()
 }
 </script>
 
@@ -21,7 +20,7 @@ let toggleImpFiltering = () => {
     <AppInput
       placeholder="Поиск по задачам"
       v-model="inputValue"
-      @input="emit('find', inputValue)"
+      @input="updateSearchValue"
     />
     <AppButton
       :class="{ red: taskStore.isfilteredByImp }"

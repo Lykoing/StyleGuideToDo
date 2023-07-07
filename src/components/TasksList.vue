@@ -4,33 +4,11 @@ import TaskItem from './TaskItem.vue'
 import ModTasksItemEdit from './ModTasksItem.vue'
 import { useTasksStore } from '../stores/tasks.store'
 
-const props = defineProps({
-  searchValue: {
-    type: String,
-    default: '',
-  },
-  toggleOnlyImp: {
-    type: Boolean,
-    default: false,
-  },
-})
-
 const taskStore = useTasksStore()
+const tasksList = computed(() => taskStore.visiblePage)
 
 let isModActive = ref(false)
 let editingOrd = ref(0)
-
-let taskListFiltered = computed(() => {
-  if (props.toggleOnlyImp) {
-    return taskStore.tasksList.filter(function (item) {
-      return item.text.includes(props.searchValue) && item.important
-    })
-  } else {
-    return taskStore.tasksList.filter(function (item) {
-      return item.text.includes(props.searchValue)
-    })
-  }
-})
 
 let editTask = (ord) => {
   isModActive.value = !isModActive.value
@@ -48,16 +26,14 @@ let finishEditing = (inputValue) => {
 <template>
   <div class="itemsList">
     <TaskItem
-      v-for="item in taskListFiltered"
-      :task="item.text"
+      v-for="item in tasksList"
+      :text="item.text"
       :ischecked="item.checked"
       :ord="item.ord"
+      :totalVisibility="item.TotalVisibility"
       :key="item.ord"
-      :isimportant="item.important"
+      :isImportant="item.isImportant"
       @editTask="editTask"
-      @deleteTask="(ord) => taskStore.deleteTask(ord)"
-      @checkTask="(ord) => taskStore.checkTask(ord)"
-      @makeTaskImp="(ord) => taskStore.makeTaskImp(ord)"
       class="toDoBlock__taskItem"
     />
     <ModTasksItemEdit

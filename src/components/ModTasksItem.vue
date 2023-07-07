@@ -22,7 +22,7 @@ let finishEditing = () => {
 <template>
   <div v-if="isModActive" class="editWindow__bg">
     <div class="editWindow__content">
-      <div><h1>Введите новый текст задачи:</h1></div>
+      <div><h1>Введите текст задачи:</h1></div>
       <AppInput
         id="modInput"
         v-model="inputValue"

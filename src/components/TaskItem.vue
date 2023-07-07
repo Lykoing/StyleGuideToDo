@@ -4,10 +4,13 @@ import AppEditSVG from './app/AppEditSVG.vue'
 import AppImpSVG from './app/AppImpSVG.vue'
 import AppCheckSVG from './app/AppCheckSVG.vue'
 import AppDeleteSVG from './app/AppDeleteSVG.vue'
+import { useTasksStore } from '../stores/tasks.store'
 
-const emit = defineEmits(['editTask', 'deleteTask', 'checkTask'])
+const taskStore = useTasksStore()
+
+const emit = defineEmits(['editTask'])
 const props = defineProps({
-  task: {
+  text: {
     type: String,
     default: '',
   },
@@ -19,29 +22,37 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  isimportant: {
+  isImportant: {
     type: Boolean,
     default: false,
+  },
+  totalVisibility: {
+    type: Boolean,
+    default: true,
   },
 })
 </script>
 
 <template>
-  <div :class="{ important: props.isimportant }" class="tasksItem">
+  <div
+    v-if="props.totalVisibility"
+    :class="{ important: props.isImportant }"
+    class="tasksItem"
+  >
     <div :class="{ checked: props.ischecked }" class="taskItem__text">
-      {{ props.task }}
+      {{ props.text }}
     </div>
     <div class="taskItem__actions">
       <div class="flex flex-col space-y-1">
         <AppButton
           class="taskItem__actions__imp"
-          @click="emit('makeTaskImp', ord)"
+          @click="taskStore.toggleTaskImp(ord)"
           ><AppImpSVG
         /></AppButton>
 
         <AppButton
           class="taskItem__actions__check"
-          @click="emit('checkTask', ord)"
+          @click="taskStore.checkTask(ord)"
         >
           <AppCheckSVG />
         </AppButton>
@@ -55,7 +66,7 @@ const props = defineProps({
         </AppButton>
         <AppButton
           class="taskItem__actions__delete"
-          @click="emit('deleteTask', ord)"
+          @click="taskStore.deleteTask(ord)"
         >
           <AppDeleteSVG />
         </AppButton>
