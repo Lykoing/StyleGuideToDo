@@ -18,7 +18,7 @@ defineProps({
 <style scoped>
 button {
   @apply px-4 py-2 
-  bg-btn-bg 
+  bg-btn-bg  
   rounded-xl
   transition-all ease-in-out duration-300 delay-75;
 }

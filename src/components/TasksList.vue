@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, inject } from 'vue'
 import TaskItem from './TaskItem.vue'
 import ModTasksItemEdit from './ModTasksItem.vue'
 import { useTasksStore } from '../stores/tasks.store'
 
 const taskStore = useTasksStore()
-const tasksList = computed(() => taskStore.visiblePage)
+const tasksList = inject('tasksList')
 
 let isModActive = ref(false)
 let editingOrd = ref(0)
@@ -30,7 +30,6 @@ let finishEditing = (inputValue) => {
       :text="item.text"
       :ischecked="item.checked"
       :ord="item.ord"
-      :totalVisibility="item.TotalVisibility"
       :key="item.ord"
       :isImportant="item.isImportant"
       @editTask="editTask"

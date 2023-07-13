@@ -26,19 +26,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  totalVisibility: {
-    type: Boolean,
-    default: true,
-  },
 })
 </script>
 
 <template>
-  <div
-    v-if="props.totalVisibility"
-    :class="{ important: props.isImportant }"
-    class="tasksItem"
-  >
+  <div :class="{ important: props.isImportant }" class="tasksItem">
     <div :class="{ checked: props.ischecked }" class="taskItem__text">
       {{ props.text }}
     </div>
@@ -85,7 +77,7 @@ const props = defineProps({
 }
 
 .taskItem__actions {
-  @apply flex flex-row gap-1;
+  @apply flex flex-row gap-1 flex-wrap;
 }
 
 .taskItem__text {

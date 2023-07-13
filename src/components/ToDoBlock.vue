@@ -1,8 +1,9 @@
 <script setup>
 import TasksList from './TasksList.vue'
-import { computed } from 'vue'
 import ToDoBlockActions from './ToDoBlockActions.vue'
 import TaskFilter from './TaskFilter.vue'
+import { usePrepTasks } from '../composable/usePrepTasks'
+usePrepTasks()
 </script>
 
 <template>

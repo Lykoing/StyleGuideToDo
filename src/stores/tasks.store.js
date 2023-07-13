@@ -1,38 +1,24 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export const useTasksStore = defineStore('tasks', () => {
   const ordNumber = ref(0)
-  const isfilteredByImp = ref(false)
-  const pageNum = ref(0)
-  const searchValue = ref('')
 
-  function incPage() {
-    pageNum.value += 1
-  }
-  function decPage() {
-    pageNum.value -= 1
-  }
+  const isFilteredByImp = ref(false)
+  const isSortedByOrd = ref(false)
+  const isSortedByDate = ref(false)
 
   const tasksList = ref([
     {
       text: 'Здесь будут ваши задачи',
-      dateCreate: new Date(),
-      ord: 10,
+      dateCreate: new Date(8.64e15),
+      ord: ordNumber.value,
       checked: false,
       isImportant: false,
       searchVisibility: true,
       TotalVisibility: true,
     },
   ])
-
-  const visiblePage = computed(() =>
-    tasksList.value.filter((item, i) => {
-      if (i >= 5 * pageNum.value && i < 5 * pageNum.value + 5) {
-        return item
-      }
-    })
-  )
 
   function addTask(text) {
     ordNumber.value += 1
@@ -44,17 +30,6 @@ export const useTasksStore = defineStore('tasks', () => {
       isImportant: false,
       searchVisibility: true,
       TotalVisibility: true,
-    })
-    setTotalVisibility()
-  }
-
-  function setTotalVisibility() {
-    tasksList.value.forEach((item) => {
-      if (isfilteredByImp.value) {
-        item.TotalVisibility = item.searchVisibility && item.isImportant
-      } else {
-        item.TotalVisibility = item.searchVisibility
-      }
     })
   }
 
@@ -72,22 +47,6 @@ export const useTasksStore = defineStore('tasks', () => {
     })
   }
 
-  function searchFiltering() {
-    tasksList.value.forEach((item) => {
-      if (item.text.includes(searchValue.value)) {
-        item.searchVisibility = true
-      } else {
-        item.searchVisibility = false
-      }
-    })
-    setTotalVisibility()
-  }
-
-  function toggleImpFiltering() {
-    isfilteredByImp.value = !isfilteredByImp.value
-    setTotalVisibility()
-  }
-
   function checkTask(ord) {
     tasksList.value.forEach((item) => {
       if (item.ord == ord) {
@@ -102,19 +61,20 @@ export const useTasksStore = defineStore('tasks', () => {
         item.isImportant = !item.isImportant
       }
     })
-    setTotalVisibility()
   }
 
-  function updateSearchValue(newSearchValue) {
-    searchValue.value = newSearchValue
-    setTotalVisibility()
-  }
-  function sortByOrd() {
-    tasksList.value.sort(conpareTasks)
+  function toggleImpFiltering() {
+    isFilteredByImp.value = !isFilteredByImp.value
   }
 
-  function conpareTasks(a, b) {
-    return a.ord - b.ord
+  function toggleSortingByOrd() {
+    isSortedByOrd.value = !isSortedByOrd.value
+    isSortedByDate.value = false
+  }
+
+  function toggleSortingByDate() {
+    isSortedByDate.value = !isSortedByDate.value
+    isSortedByOrd.value = false
   }
 
   return {
@@ -124,15 +84,11 @@ export const useTasksStore = defineStore('tasks', () => {
     checkTask,
     editTask,
     toggleTaskImp,
-    isfilteredByImp,
+    isFilteredByImp,
+    isSortedByOrd,
+    isSortedByDate,
     toggleImpFiltering,
-    searchValue,
-    searchFiltering,
-    updateSearchValue,
-    sortByOrd,
-    visiblePage,
-    incPage,
-    decPage,
-    pageNum,
+    toggleSortingByOrd,
+    toggleSortingByDate,
   }
 })

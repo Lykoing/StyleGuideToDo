@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import AppInput from './app/AppInput.vue'
 import AppButton from './app/AppButton.vue'
 import AppImpSVG from './app/AppImpSVG.vue'
@@ -9,10 +9,7 @@ const taskStore = useTasksStore()
 const inputValue = ref()
 const toggleImpFiltering = taskStore.toggleImpFiltering
 
-let updateSearchValue = () => {
-  taskStore.updateSearchValue(inputValue.value)
-  taskStore.searchFiltering()
-}
+let setSearchField = inject('tasksSetSearchField')
 </script>
 
 <template>
@@ -20,10 +17,10 @@ let updateSearchValue = () => {
     <AppInput
       placeholder="Поиск по задачам"
       v-model="inputValue"
-      @input="updateSearchValue"
+      @input="setSearchField(inputValue)"
     />
     <AppButton
-      :class="{ red: taskStore.isfilteredByImp }"
+      :class="{ red: taskStore.isFilteredByImp }"
       class="flex flex-row"
       @click="toggleImpFiltering"
     >
@@ -34,7 +31,7 @@ let updateSearchValue = () => {
 
 <style scoped>
 .search {
-  @apply flex flex-row justify-between;
+  @apply flex flex-row justify-between flex-wrap;
 }
 .red {
   @apply bg-btn-imp;
