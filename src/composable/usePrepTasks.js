@@ -1,87 +1,62 @@
-import { computed, provide, ref } from 'vue'
+import { computed, provide, watch } from 'vue'
 import { useTasksStore } from '../stores/tasks.store'
-import { useSearchTask } from './useSearchTask'
+import { useSortTask } from './useSortTask'
+import { useFilterTask } from './useFilterTask'
+import { usePagingTask } from './usePagingTask'
 
 /**
- * Подготовка данных с пагинацией и фильтрами
+ * Подготовка данных с пагинацией, фильтрацией и сортировками
  */
 export function usePrepTasks() {
   const tasksStore = useTasksStore()
-  const search = useSearchTask()
-  const currentPageNum = ref(0)
-  const amountOfElementsOnPage = ref(5)
+  const sorting = useSortTask()
+  const filtering = useFilterTask()
+  const paging = usePagingTask()
 
-  function compareByOrdFn(task1, task2) {
-    return task1.ord - task2.ord
-  }
-
-  function compareByDateFn(task1, task2) {
-    return task1.dateCreate - task2.dateCreate
-  }
-
-  // Получаем все данные
-  const itemsAllList = computed(() => {
+  const itemsFiltered = computed(() => {
     let data = tasksStore.tasksList
-    if (tasksStore.isSortedByDate) data = data.sort(compareByDateFn)
-    if (tasksStore.isSortedByOrd) data = data.sort(compareByOrdFn)
-    if (search.isActive.value) {
-      currentPageNum.value = 0
-      data = data.filter((e) => search.check(e.text))
-    }
-    if (tasksStore.isFilteredByImp) {
-      currentPageNum.value = 0
-      data = data.filter((e) => e.isImportant)
-    }
-    data = data.slice(
-      currentPageNum.value * amountOfElementsOnPage.value,
-      currentPageNum.value * amountOfElementsOnPage.value +
-        amountOfElementsOnPage.value
-    )
+    sorting.sortByDate(data)
+    sorting.sortByOrd(data)
+    data = filtering.filterByImportance(data)
+    data = filtering.filterBySearch(data)
     return data
   })
 
-  // Считаем колличество всех вдимых записей
-  const itemsAllCount = computed(() => itemsAllList.value?.length)
-  const lastPageNum = computed(() => {
-    if (tasksStore.tasksList.length % amountOfElementsOnPage.value != 0)
-      return Math.trunc(
-        tasksStore.tasksList.length / amountOfElementsOnPage.value
-      )
-    return (
-      Math.trunc(tasksStore.tasksList.length / amountOfElementsOnPage.value) - 1
-    )
+  const itemsOnPage = computed(() => {
+    let data = itemsFiltered.value
+    data = paging.getElementsOnPage(data)
+    paging.setLastPageNum(tasksStore)
+    return data
   })
 
-  function nextPage() {
-    if (currentPageNum.value < lastPageNum.value) currentPageNum.value += 1
-  }
+  watch([filtering.isFilteredByImportance, filtering.isFilteredBySearch], () =>
+    paging.setCurrenPageNum(0)
+  )
+  watch(paging.checkExtraPage, (isExtraExist) => {
+    if (isExtraExist)
+      if (paging.currentPageNum.value > 0)
+        paging.setCurrenPageNum(paging.currentPageNum.value - 1)
+  })
 
-  function prevPage() {
-    if (currentPageNum.value > 0) currentPageNum.value -= 1
-  }
-
-  function toLastPage() {
-    console.log('Зашёл на ласт')
-    currentPageNum.value = lastPageNum.value
-  }
-
-  function toFirstPage() {
-    console.log('Зашёл на фёрст')
-    currentPageNum.value = 0
-  }
-
-  provide('tasksSetSearchField', search.setSearchFiled)
-  provide('tasksList', itemsAllList)
-  provide('tasksAllCount', itemsAllCount)
-  provide('tasksNextPage', nextPage)
-  provide('tasksPrevPage', prevPage)
-  provide('tasksToLastPage', toLastPage)
-  provide('tasksToFirstPage', toFirstPage)
-  provide('tasksLastPage', lastPageNum)
+  provide('tasksSetSearchField', filtering.setSearchFiled)
+  provide('tasksList', itemsOnPage)
+  provide('tasksNextPage', paging.nextPage)
+  provide('tasksPrevPage', paging.prevPage)
+  provide('tasksToLastPage', paging.toLastPage)
+  provide('tasksToFirstPage', paging.toFirstPage)
+  provide('tasksLastPage', paging.lastPageNum)
   provide(
     'tasksCurrentPage',
-    computed(() => currentPageNum)
+    computed(() => paging.currentPageNum)
   )
-
+  provide('tasksToggleSortingByOrd', sorting.toggleSortingByOrd)
+  provide('tasksToggleSortingByDate', sorting.toggleSortingByDate)
+  provide('tasksIssortedByOrd', sorting.isSortedByOrd)
+  provide('tasksIssortedByDate', sorting.isSortedByDate)
+  provide(
+    'tasksToggleFilteringByImportance',
+    filtering.toggleFilteringByImportance
+  )
+  provide('tasksIsFilteredByImportance', filtering.isFilteredByImportance)
   return {}
 }

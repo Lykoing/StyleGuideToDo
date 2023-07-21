@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export const useTasksStore = defineStore('tasks', () => {
   const ordNumber = ref(0)
-
-  const isFilteredByImp = ref(false)
-  const isSortedByOrd = ref(false)
-  const isSortedByDate = ref(false)
-
+  const length = computed(() => tasksList.value.length)
   const tasksList = ref([
     {
       text: 'Здесь будут ваши задачи',
@@ -63,20 +59,6 @@ export const useTasksStore = defineStore('tasks', () => {
     })
   }
 
-  function toggleImpFiltering() {
-    isFilteredByImp.value = !isFilteredByImp.value
-  }
-
-  function toggleSortingByOrd() {
-    isSortedByOrd.value = !isSortedByOrd.value
-    isSortedByDate.value = false
-  }
-
-  function toggleSortingByDate() {
-    isSortedByDate.value = !isSortedByDate.value
-    isSortedByOrd.value = false
-  }
-
   return {
     tasksList,
     addTask,
@@ -84,11 +66,6 @@ export const useTasksStore = defineStore('tasks', () => {
     checkTask,
     editTask,
     toggleTaskImp,
-    isFilteredByImp,
-    isSortedByOrd,
-    isSortedByDate,
-    toggleImpFiltering,
-    toggleSortingByOrd,
-    toggleSortingByDate,
+    length,
   }
 })

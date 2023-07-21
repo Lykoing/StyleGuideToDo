@@ -5,8 +5,10 @@ import ModTasksItem from './ModTasksItem.vue'
 import { ref, inject } from 'vue'
 
 const tasksStore = useTasksStore()
-const toggleSortingByOrd = tasksStore.toggleSortingByOrd
-const toggleSortingByDate = tasksStore.toggleSortingByDate
+const toggleSortingByOrd = inject('tasksToggleSortingByOrd')
+const toggleSortingByDate = inject('tasksToggleSortingByDate')
+const isSortedByOrd = inject('tasksIssortedByOrd')
+const isSortedByDate = inject('tasksIssortedByDate')
 const nextPage = inject('tasksNextPage')
 const prevPage = inject('tasksPrevPage')
 const toLastPage = inject('tasksToLastPage')
@@ -30,14 +32,14 @@ let addTask = (inputValue) => {
       <AppButton
         class="flex grow"
         @click="toggleSortingByOrd"
-        :class="{ red: tasksStore.isSortedByOrd }"
+        :class="{ red: isSortedByOrd }"
       >
         <strong>Сортировка по ord</strong>
       </AppButton>
       <AppButton
         class="flex grow"
         @click="toggleSortingByDate"
-        :class="{ red: tasksStore.isSortedByDate }"
+        :class="{ red: isSortedByDate }"
       >
         <strong>Сортировка по Date</strong>
       </AppButton>

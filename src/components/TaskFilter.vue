@@ -3,13 +3,12 @@ import { ref, inject } from 'vue'
 import AppInput from './app/AppInput.vue'
 import AppButton from './app/AppButton.vue'
 import AppImpSVG from './app/AppImpSVG.vue'
-import { useTasksStore } from '../stores/tasks.store'
-const taskStore = useTasksStore()
 
 const inputValue = ref()
-const toggleImpFiltering = taskStore.toggleImpFiltering
+const toggleFilteringByImportance = inject('tasksToggleFilteringByImportance')
+const isFilteredByImportance = inject('tasksIsFilteredByImportance')
 
-let setSearchField = inject('tasksSetSearchField')
+const setSearchField = inject('tasksSetSearchField')
 </script>
 
 <template>
@@ -20,9 +19,9 @@ let setSearchField = inject('tasksSetSearchField')
       @input="setSearchField(inputValue)"
     />
     <AppButton
-      :class="{ red: taskStore.isFilteredByImp }"
+      :class="{ red: isFilteredByImportance }"
       class="flex flex-row"
-      @click="toggleImpFiltering"
+      @click="toggleFilteringByImportance"
     >
       <strong>Только</strong> <AppImpSVG />
     </AppButton>
